@@ -140,3 +140,7 @@ def delete_bidang(request, id):
         bidang.delete()
         messages.success(request, 'Bidang berhasil dihapus!')
         return redirect('bidang')  # Kembali ke halaman tabel
+    
+# mengarahkan ke halaman kelola pegawai
+def pegawai(request):
+    return render(request, 'pegawai.html')
