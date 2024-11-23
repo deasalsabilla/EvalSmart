@@ -14,7 +14,9 @@ def login(request):
 
 #mengarahkan ke halaman kelola user
 def user(request):
-    return render(request, 'user.html')
+    # Ambil data user yang bukan staff dan aktif
+    users = User.objects.filter(is_staff=False, is_active=True).order_by('id')
+    return render(request, 'user.html', {'users': users})
 
 #fungsi tambah user
 def tambah_user(request):
@@ -54,6 +56,19 @@ def tambah_user(request):
 
     # Jika request bukan POST, kembalikan halaman form
     return render(request, 'tambah_user.html')
+
+# fungsi hapus user
+def hapus_user(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+        if not user.is_staff:  # Pastikan pengguna yang dihapus bukan staff
+            user.delete()
+            messages.success(request, "User berhasil dihapus.")
+        else:
+            messages.error(request, "Tidak dapat menghapus user dengan status staff.")
+    except User.DoesNotExist:
+        messages.error(request, "User tidak ditemukan.")
+    return redirect('user')
 
 #mengarahkan ke halaman kelola bidang dan menampilkan data bidang
 def bidang(request):

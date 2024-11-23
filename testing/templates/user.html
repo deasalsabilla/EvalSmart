@@ -85,54 +85,39 @@
             <div class="card">
               <div class="card-body">
                 <table class="table table-striped mt-2">
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Name</th>
-                      <th scope="col">Position</th>
-                      <th scope="col">Age</th>
-                      <th scope="col">Start Date</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th scope="row">1</th>
-                      <td>Brandon Jacob</td>
-                      <td>Designer</td>
-                      <td>28</td>
-                      <td>2016-05-25</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>Bridie Kessler</td>
-                      <td>Developer</td>
-                      <td>35</td>
-                      <td>2014-12-05</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">3</th>
-                      <td>Ashleigh Langosh</td>
-                      <td>Finance</td>
-                      <td>45</td>
-                      <td>2011-08-12</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">4</th>
-                      <td>Angus Grady</td>
-                      <td>HR</td>
-                      <td>34</td>
-                      <td>2012-06-11</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">5</th>
-                      <td>Raheem Lehner</td>
-                      <td>Dynamic Division Officer</td>
-                      <td>47</td>
-                      <td>2011-04-19</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <!-- End Table with stripped rows -->
+                    <thead>
+                      <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Nama Depan</th>
+                        <th scope="col">Nama Belakang</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Aksi</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for user in users %}
+                        <tr>
+                          <th scope="row">{{ forloop.counter }}</th>
+                          <td>{{ user.first_name }}</td>
+                          <td>{{ user.last_name }}</td>
+                          <td>{{ user.username }}</td>
+                          <td>{{ user.email }}</td>
+                          <td>
+                            <form action="{% url 'hapus_user' user.id %}" method="post" class="d-inline">
+                              {% csrf_token %}
+                              <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus user ini?');"><i class="bi bi-trash"></i> Hapus</button>
+                            </form>
+                          </td>
+                        </tr>
+                      {% empty %}
+                        <tr>
+                          <td colspan="6" class="text-center">Tidak ada data pengguna.</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                  <!-- End Table with stripped rows -->
               </div>
             </div>
           </div>

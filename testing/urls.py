@@ -25,8 +25,9 @@ urlpatterns = [
     path("login/", views.login, name="login"),
     path("bidang/", views.bidang, name="bidang"),
     path("bidang/tambah-bidang/", views.tambah_bidang, name="tambahBidang"),
-    path('bidang/edit/<int:id>/', views.edit_bidang, name='edit_bidang'),
-    path('bidang/delete/<int:id>/', views.delete_bidang, name='delete_bidang'),
+    path('bidang/edit-bidang/<int:id>/', views.edit_bidang, name='edit_bidang'),
+    path('bidang/hapus-bidang/<int:id>/', views.delete_bidang, name='delete_bidang'),
     path("user/", views.user, name="user"),
     path("user/tambah-user/", views.tambah_user, name="tambah_user"),
+    path('user/hapus-user/<int:user_id>/', views.hapus_user, name='hapus_user'),
 ]
