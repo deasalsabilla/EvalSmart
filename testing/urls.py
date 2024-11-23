@@ -23,6 +23,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", views.home, name="home"),
     path("login/", views.login, name="login"),
+    path('logout/', views.logout_view, name='logout'),
     path("bidang/", views.bidang, name="bidang"),
     path("bidang/tambah-bidang/", views.tambah_bidang, name="tambahBidang"),
     path('bidang/edit-bidang/<int:id>/', views.edit_bidang, name='edit_bidang'),

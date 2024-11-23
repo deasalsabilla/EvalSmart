@@ -3,14 +3,39 @@ from django.contrib import messages
 from .models import Bidang
 from django.http import HttpResponse
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login as auth_login, logout
+from django.contrib.auth.decorators import login_required
 
 #mengarahkan ke halaman beranda
+@login_required(login_url='login')  # Redirect ke halaman login jika belum login
 def home(request):
     return render(request, 'index.html')
 
-#mengarahkan ke halaman login
+#fungsi login
 def login(request):
+    if request.method == "POST":
+        # Ambil data dari form
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        # Autentikasi pengguna
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            # Login berhasil
+            auth_login(request, user)
+            return redirect('home')  # Ubah 'home' ke URL utama Anda
+        else:
+            # Login gagal
+            messages.success(request, "Username atau password salah.")
+            return redirect('login')
+    
+    # Jika request bukan POST, render halaman login
     return render(request, 'login.html')
+
+def logout_view(request):
+    logout(request)
+    messages.success(request, "Anda telah berhasil logout.")
+    return redirect('login')
 
 #mengarahkan ke halaman kelola user
 def user(request):
