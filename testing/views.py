@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from .models import Bidang
 from django.http import HttpResponse
+from django.contrib.auth.models import User
 
 #mengarahkan ke halaman beranda
 def home(request):
@@ -17,6 +18,41 @@ def user(request):
 
 #fungsi tambah user
 def tambah_user(request):
+    if request.method == "POST":
+        # Ambil data dari form
+        nama_depan = request.POST.get('nama_depan')
+        nama_belakang = request.POST.get('nama_belakang')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        password2 = request.POST.get('password2')
+        
+        # Validasi input
+        if password != password2:
+            messages.error(request, "Password dan Konfirmasi Password tidak cocok.")
+            return redirect('tambah_user')
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Username sudah digunakan.")
+            return redirect('tambah_user')
+
+        if User.objects.filter(email=email).exists():
+            messages.error(request, "Email sudah terdaftar.")
+            return redirect('tambah_user')
+
+        # Simpan data user ke database
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password,
+            first_name=nama_depan,
+            last_name=nama_belakang
+        )
+        user.save()
+        messages.success(request, "User berhasil ditambahkan!")
+        return redirect('user')  # Ubah sesuai kebutuhan
+
+    # Jika request bukan POST, kembalikan halaman form
     return render(request, 'tambah_user.html')
 
 #mengarahkan ke halaman kelola bidang dan menampilkan data bidang
@@ -26,6 +62,7 @@ def bidang(request):
     # Kirimkan data ke template
     return render(request, 'bidang.html', {'bidangs': bidangs})
 
+# fungsi tambah bidang
 def tambah_bidang(request):
     if request.method == "POST":
         # Ambil data dari input form
