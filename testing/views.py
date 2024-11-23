@@ -15,6 +15,10 @@ def login(request):
 def user(request):
     return render(request, 'user.html')
 
+#fungsi tambah user
+def tambah_user(request):
+    return render(request, 'tambah_user.html')
+
 #mengarahkan ke halaman kelola bidang dan menampilkan data bidang
 def bidang(request):
     # Ambil semua data dari model Bidang

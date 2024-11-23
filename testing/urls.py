@@ -28,4 +28,5 @@ urlpatterns = [
     path('bidang/edit/<int:id>/', views.edit_bidang, name='edit_bidang'),
     path('bidang/delete/<int:id>/', views.delete_bidang, name='delete_bidang'),
     path("user/", views.user, name="user"),
+    path("user/tambah-user/", views.tambah_user, name="tambah_user"),
 ]
