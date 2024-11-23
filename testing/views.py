@@ -7,16 +7,12 @@ from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required
 
 # mengarahkan ke halaman beranda
-
-
 # Redirect ke halaman login jika belum login
 @login_required(login_url='login')
 def home(request):
     return render(request, 'index.html')
 
 # fungsi login
-
-
 def login(request):
     if request.method == "POST":
         # Ambil data dari form
@@ -37,23 +33,19 @@ def login(request):
     # Jika request bukan POST, render halaman login
     return render(request, 'login.html')
 
-
+# fungsi logout
 def logout_view(request):
     logout(request)
     messages.success(request, "Anda telah berhasil logout.")
     return redirect('login')
 
 # mengarahkan ke halaman kelola user
-
-
 def user(request):
     # Ambil data user yang bukan staff dan aktif
     users = User.objects.filter(is_staff=False, is_active=True).order_by('id')
     return render(request, 'user.html', {'users': users})
 
 # fungsi tambah user
-
-
 def tambah_user(request):
     if request.method == "POST":
         # Ambil data dari form
@@ -94,8 +86,6 @@ def tambah_user(request):
     return render(request, 'tambah_user.html')
 
 # fungsi hapus user
-
-
 def hapus_user(request, user_id):
     try:
         user = User.objects.get(id=user_id)
@@ -110,8 +100,6 @@ def hapus_user(request, user_id):
     return redirect('user')
 
 # mengarahkan ke halaman kelola bidang dan menampilkan data bidang
-
-
 def bidang(request):
     # Ambil semua data dari model Bidang
     bidangs = Bidang.objects.all()
@@ -119,8 +107,6 @@ def bidang(request):
     return render(request, 'bidang.html', {'bidangs': bidangs})
 
 # fungsi tambah bidang
-
-
 def tambah_bidang(request):
     if request.method == "POST":
         # Ambil data dari input form
@@ -142,8 +128,6 @@ def tambah_bidang(request):
     return render(request, 'tambahBidang.html')
 
 # Fungsi Edit Bidang
-
-
 def edit_bidang(request, id):
     bidang = get_object_or_404(Bidang, id=id)
     if request.method == 'POST':
@@ -154,8 +138,6 @@ def edit_bidang(request, id):
     return render(request, 'edit_bidang.html', {'bidang': bidang})
 
 # Fungsi Hapus Bidang
-
-
 def delete_bidang(request, id):
     bidang = get_object_or_404(Bidang, id=id)
     if request.method == 'POST':
@@ -164,13 +146,13 @@ def delete_bidang(request, id):
         return redirect('bidang')  # Kembali ke halaman tabel
 
 # mengarahkan ke halaman kelola pegawai
-
-
 def pegawai(request):
     return render(request, 'pegawai.html')
 
 # mengarahkan ke halaman kelola kriteria
-
-
 def kriteria(request):
     return render(request, 'kriteria.html')
+
+# mengarahkan ke halaman kelola penilaian
+def penilaian(request):
+    return render(request, 'penilaian.html')

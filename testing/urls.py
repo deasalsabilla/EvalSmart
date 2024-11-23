@@ -33,4 +33,5 @@ urlpatterns = [
     path('user/hapus-user/<int:user_id>/', views.hapus_user, name='hapus_user'),
     path("pegawai/", views.pegawai, name="pegawai"),
     path("kriteria/", views.kriteria, name="kriteria"),
+    path("penilaian/", views.penilaian, name="penilaian"),
 ]
