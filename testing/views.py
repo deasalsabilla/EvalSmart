@@ -157,6 +157,10 @@ def tambah_pegawai(request):
 def kriteria(request):
     return render(request, 'kriteria.html')
 
+# mengarahkan ke halaman tambah kriteria
+def tambah_kriteria(request):
+    return render(request, 'tambah_kriteria.html')
+
 # mengarahkan ke halaman kelola penilaian
 def penilaian(request):
     return render(request, 'penilaian.html')
