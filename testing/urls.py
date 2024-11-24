@@ -37,4 +37,5 @@ urlpatterns = [
     path("kriteria/tambah-kriteria/", views.tambah_kriteria, name="tambah_kriteria"),
     path("penilaian/", views.penilaian, name="penilaian"),
     path("penilaian/pegawai-terbaik/", views.pegawai_terbaik, name="pegawai_terbaik"),
+    path("riwayat/", views.riwayat, name="riwayat"),
 ]

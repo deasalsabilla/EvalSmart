@@ -168,3 +168,7 @@ def penilaian(request):
 # mengarahkan ke halaman pegawai terbaik
 def pegawai_terbaik(request):
     return render(request, 'pegawai_terbaik.html')
+
+# mengarahkan ke halaman riwayat
+def riwayat(request):
+    return render(request, 'riwayat.html')
