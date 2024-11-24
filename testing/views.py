@@ -164,3 +164,7 @@ def tambah_kriteria(request):
 # mengarahkan ke halaman kelola penilaian
 def penilaian(request):
     return render(request, 'penilaian.html')
+
+# mengarahkan ke halaman pegawai terbaik
+def pegawai_terbaik(request):
+    return render(request, 'pegawai_terbaik.html')
