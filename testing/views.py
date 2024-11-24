@@ -149,6 +149,10 @@ def delete_bidang(request, id):
 def pegawai(request):
     return render(request, 'pegawai.html')
 
+# mengarahkan ke halaman tambah pegawai
+def tambah_pegawai(request):
+    return render(request, 'tambah_pegawai.html')
+
 # mengarahkan ke halaman kelola kriteria
 def kriteria(request):
     return render(request, 'kriteria.html')
