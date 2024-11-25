@@ -29,13 +29,13 @@
     <!-- Template Main CSS File -->
     <link href="{% static 'assets/css/style.css' %}" rel="stylesheet" />
 
-    <!--    =======================================================
+    <!--     =======================================================
   * Template Name: NiceAdmin
   * Updated: Sep 18 2023 with Bootstrap v5.3.2
   * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
-  ========================================================    -->
+  ========================================================     -->
   </head>
 
   <body>
@@ -68,24 +68,24 @@
                   {% csrf_token %}
                   <div class="col-12">
                     <label for="nomor_induk" class="form-label">Nomor Induk Pegawai</label>
-                    <input type="number" class="form-control" id="nomor_induk" name="nomor_induk" />
+                    <input type="number" class="form-control" id="nomor_induk" name="nomor_induk" required />
                   </div>
                   <div class="col-12">
                     <label for="nama_pegawai" class="form-label">Nama Pegawai</label>
-                    <input type="text" class="form-control" id="nama_pegawai" name="nama_pegawai" />
+                    <input type="text" class="form-control" id="nama_pegawai" name="nama_pegawai" required />
                   </div>
                   <div class="col-12">
                     <label for="alamat" class="form-label">Alamat</label>
-                    <textarea class="form-control" style="height: 100px" name="alamat"></textarea>
+                    <textarea class="form-control" id="alamat" style="height: 100px" name="alamat" required></textarea>
                   </div>
                   <div class="col-12">
                     <label for="no_hp" class="form-label">Telepon</label>
-                    <input type="number" class="form-control" id="no_hp" name="no_hp" />
+                    <input type="number" class="form-control" id="no_hp" name="no_hp" required />
                   </div>
                   <div class="col-12">
                     <label for="pilih_bidang" class="form-label">Pilih Bidang</label>
-                    <select class="form-select" aria-label="Default select example">
-                      <option selected>-- Pilih Bidang --</option>
+                    <select class="form-select" id="pilih_bidang" name="pilih_bidang" required>
+                      <option value="" selected>-- Pilih Bidang --</option>
                       {% for bidang in bidang_list %}
                         <option value="{{ bidang.id }}">{{ bidang.nama }}</option>
                       {% endfor %}

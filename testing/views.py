@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
-from .models import Bidang
+from .models import Bidang, Pegawai
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout
@@ -149,9 +149,34 @@ def delete_bidang(request, id):
 def pegawai(request):
     return render(request, 'pegawai.html')
 
-# mengarahkan ke halaman tambah pegawai
+# fungsi tambah pegawai
 def tambah_pegawai(request):
-    bidang_list = Bidang.objects.all()  # Ambil semua data dari model Bidang
+    if request.method == "POST":
+        nomor_induk = request.POST.get('nomor_induk')
+        nama_pegawai = request.POST.get('nama_pegawai')
+        alamat = request.POST.get('alamat')
+        no_hp = request.POST.get('no_hp')
+        bidang_id = request.POST.get('pilih_bidang')  # ID bidang dari dropdown
+
+        # Validasi dan penyimpanan data
+        try:
+            bidang = Bidang.objects.get(id=bidang_id)  # Cari bidang berdasarkan ID
+            Pegawai.objects.create(
+                nomor_induk=nomor_induk,
+                nama=nama_pegawai,
+                alamat=alamat,
+                no_telp=no_hp,
+                bidang=bidang
+            )
+            messages.success(request, "Pegawai berhasil ditambahkan.")
+            return redirect('pegawai')  # Redirect ke halaman tambah pegawai
+        except Bidang.DoesNotExist:
+            messages.error(request, "Bidang tidak ditemukan.")
+        except Exception as e:
+            messages.error(request, f"Terjadi kesalahan: {str(e)}")
+
+    # Ambil data bidang untuk ditampilkan di dropdown
+    bidang_list = Bidang.objects.all()
     return render(request, 'tambah_pegawai.html', {'bidang_list': bidang_list})
 
 # mengarahkan ke halaman kelola kriteria
