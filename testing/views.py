@@ -151,7 +151,8 @@ def pegawai(request):
 
 # mengarahkan ke halaman tambah pegawai
 def tambah_pegawai(request):
-    return render(request, 'tambah_pegawai.html')
+    bidang_list = Bidang.objects.all()  # Ambil semua data dari model Bidang
+    return render(request, 'tambah_pegawai.html', {'bidang_list': bidang_list})
 
 # mengarahkan ke halaman kelola kriteria
 def kriteria(request):
