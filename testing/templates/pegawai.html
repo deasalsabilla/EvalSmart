@@ -83,49 +83,37 @@
                 <table class="table table-striped mt-2">
                   <thead>
                     <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Name</th>
-                      <th scope="col">Position</th>
-                      <th scope="col">Age</th>
-                      <th scope="col">Start Date</th>
+                      <th scope="col">Nomor Induk</th>
+                      <th scope="col">Nama</th>
+                      <th scope="col">Alamat</th>
+                      <th scope="col">Telepon</th>
+                      <th scope="col">Bidang</th>
+                      <th scope="col">Aksi</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <th scope="row">1</th>
-                      <td>Brandon Jacob</td>
-                      <td>Designer</td>
-                      <td>28</td>
-                      <td>2016-05-25</td>
+                      {% for pegawai in pegawais %}
+                      <td>{{ pegawai.nomor_induk }}</td>
+                      <td>{{ pegawai.nama }}</td>
+                      <td>{{ pegawai.alamat }}</td>
+                      <td>{{ pegawai.no_telp }}</td>
+                      <td>{{ pegawai.bidang }}</td>
+                      <td>
+                        <!-- Tombol Edit -->
+                        <a href="" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i> Edit</a>
+                        <!-- Tombol Hapus -->
+                        <form action="" method="post" style="display:inline;">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus bidang ini?');"><i class="bi bi-trash"></i> Hapus</button>
+                        </form>
+                      </td>
                     </tr>
+                  {% empty %}
                     <tr>
-                      <th scope="row">2</th>
-                      <td>Bridie Kessler</td>
-                      <td>Developer</td>
-                      <td>35</td>
-                      <td>2014-12-05</td>
+                      <td colspan="3" class="text-center">Tidak ada data</td>
                     </tr>
-                    <tr>
-                      <th scope="row">3</th>
-                      <td>Ashleigh Langosh</td>
-                      <td>Finance</td>
-                      <td>45</td>
-                      <td>2011-08-12</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">4</th>
-                      <td>Angus Grady</td>
-                      <td>HR</td>
-                      <td>34</td>
-                      <td>2012-06-11</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">5</th>
-                      <td>Raheem Lehner</td>
-                      <td>Dynamic Division Officer</td>
-                      <td>47</td>
-                      <td>2011-04-19</td>
-                    </tr>
+                  {% endfor %}
                   </tbody>
                 </table>
                 <!-- End Table with stripped rows -->

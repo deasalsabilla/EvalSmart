@@ -147,7 +147,8 @@ def delete_bidang(request, id):
 
 # mengarahkan ke halaman kelola pegawai
 def pegawai(request):
-    return render(request, 'pegawai.html')
+    pegawais = Pegawai.objects.all()
+    return render(request, 'pegawai.html', {'pegawais' : pegawais})
 
 # fungsi tambah pegawai
 def tambah_pegawai(request):
