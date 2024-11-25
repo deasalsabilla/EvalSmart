@@ -180,6 +180,32 @@ def tambah_pegawai(request):
     bidang_list = Bidang.objects.all()
     return render(request, 'tambah_pegawai.html', {'bidang_list': bidang_list})
 
+# FUNGSI EDIT PEGAWAI
+def edit_pegawai(request, pegawai_id):
+    pegawai = get_object_or_404(Pegawai, id=pegawai_id)  # Ambil data pegawai berdasarkan ID
+    bidang_list = Bidang.objects.all()  # Ambil semua bidang untuk dropdown
+
+    if request.method == "POST":
+        # Ambil data dari form
+        pegawai.nomor_induk = request.POST.get('nomor_induk')
+        pegawai.nama = request.POST.get('nama_pegawai')
+        pegawai.alamat = request.POST.get('alamat')
+        pegawai.no_telp = request.POST.get('no_hp')
+
+        bidang_id = request.POST.get('pilih_bidang')
+        try:
+            pegawai.bidang = Bidang.objects.get(id=bidang_id)  # Update bidang berdasarkan ID yang dipilih
+            pegawai.save()  # Simpan perubahan ke database
+            messages.success(request, "Data pegawai berhasil diperbarui.")
+            return redirect('pegawai')  # Redirect ke halaman daftar pegawai (atau lainnya)
+        except Bidang.DoesNotExist:
+            messages.error(request, "Bidang tidak ditemukan.")
+        except Exception as e:
+            messages.error(request, f"Terjadi kesalahan: {str(e)}")
+
+    return render(request, 'edit_pegawai.html', {'pegawai': pegawai, 'bidang_list': bidang_list})
+
+
 # mengarahkan ke halaman kelola kriteria
 def kriteria(request):
     return render(request, 'kriteria.html')
