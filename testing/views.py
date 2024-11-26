@@ -145,7 +145,7 @@ def delete_bidang(request, id):
         messages.success(request, 'Bidang berhasil dihapus!')
         return redirect('bidang')  # Kembali ke halaman tabel
 
-# mengarahkan ke halaman kelola pegawai
+# mengarahkan ke halaman dan menampilkan data kelola pegawai
 def pegawai(request):
     pegawais = Pegawai.objects.all()
     return render(request, 'pegawai.html', {'pegawais' : pegawais})
@@ -205,6 +205,13 @@ def edit_pegawai(request, pegawai_id):
 
     return render(request, 'edit_pegawai.html', {'pegawai': pegawai, 'bidang_list': bidang_list})
 
+# Fungsi Hapus Bidang
+def delete_pegawai(request, id):
+    bidang = get_object_or_404(Bidang, id=id)
+    if request.method == 'POST':
+        bidang.delete()
+        messages.success(request, 'Bidang berhasil dihapus!')
+        return redirect('pegawai')  # Kembali ke halaman tabel
 
 # mengarahkan ke halaman kelola kriteria
 def kriteria(request):

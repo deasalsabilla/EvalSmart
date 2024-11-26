@@ -34,6 +34,7 @@ urlpatterns = [
     path("pegawai/", views.pegawai, name="pegawai"),
     path("pegawai/tambah-pegawai/", views.tambah_pegawai, name="tambah_pegawai"),
     path('pegawai/edit-pegawai/<int:pegawai_id>/', views.edit_pegawai, name='edit_pegawai'),
+    path('bidang/hapus-pegawai/<int:id>/', views.delete_pegawai, name='delete_pegawai'),
     path("kriteria/", views.kriteria, name="kriteria"),
     path("kriteria/tambah-kriteria/", views.tambah_kriteria, name="tambah_kriteria"),
     path("penilaian/", views.penilaian, name="penilaian"),
