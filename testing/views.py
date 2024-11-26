@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
 
 # mengarahkan ke halaman beranda
 # Redirect ke halaman login jika belum login
@@ -255,6 +256,41 @@ def delete_kriteria(request, id):
         kriteria.delete()
         messages.success(request, 'Kriteria berhasil dihapus!')
         return redirect('kriteria')  # Kembali ke halaman tabel
+    
+# fungsi input bobot
+def input_bobot(request):
+    if request.method == "POST":
+        try:
+            bobot_baru = float(request.POST.get('bobot', 0))  # Ambil input bobot dari form
+            total_bobot_sekarang = Kriteria.objects.aggregate(total=Sum('bobot'))['total'] or 0
+
+            # Hitung total bobot jika bobot baru ditambahkan
+            total_bobot_setelah_input = total_bobot_sekarang + bobot_baru
+
+            if total_bobot_setelah_input > 100:
+                # Jika total bobot melebihi 100, tampilkan pesan error
+                messages.error(
+                    request, 
+                    f"Bobot yang Anda masukkan melebihi batas. Maksimal yang bisa ditambahkan adalah {100 - total_bobot_sekarang:.2f}%."
+                )
+            else:
+                # Simpan bobot baru
+                kriteria = Kriteria.objects.latest('id')  # Ambil kriteria terakhir yang dibuat
+                kriteria.bobot = bobot_baru
+                kriteria.save()
+
+                messages.success(request, "Bobot berhasil ditambahkan.")
+                return redirect('kriteria')  # Ganti dengan URL yang sesuai
+        except ValueError:
+            messages.error(request, "Bobot harus berupa angka yang valid.")
+    
+    # Data untuk ditampilkan di template
+    total_bobot_sekarang = Kriteria.objects.aggregate(total=Sum('bobot'))['total'] or 0
+    context = {
+        'total_bobot_sekarang': total_bobot_sekarang,
+        'bobot_maksimal': 100 - total_bobot_sekarang,
+    }
+    return render(request, 'bobot_kriteria.html', context)
 
 # mengarahkan ke halaman kelola penilaian
 def penilaian(request):
