@@ -88,7 +88,7 @@
                           <option value="" selected>-- Pilih Bidang --</option>
                           {% for bidang in bidang_list %}
                               <option value="{{ bidang.id }}" {% if bidang.id == pegawai.bidang.id %}selected{% endif %}>
-                                  {{ bidang.nama_bidang }}
+                                  {{ bidang.nama }}
                               </option>
                           {% endfor %}
                       </select>
