@@ -248,6 +248,13 @@ def edit_kriteria(request, id):
         return redirect('kriteria')  # Kembali ke halaman tabel
     return render(request, 'edit_kriteria.html', {'kriteria': kriteria})
 
+# Fungsi Hapus Kriteria
+def delete_kriteria(request, id):
+    kriteria = get_object_or_404(Kriteria, id=id)
+    if request.method == 'POST':
+        kriteria.delete()
+        messages.success(request, 'Kriteria berhasil dihapus!')
+        return redirect('kriteria')  # Kembali ke halaman tabel
 
 # mengarahkan ke halaman kelola penilaian
 def penilaian(request):
