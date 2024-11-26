@@ -207,10 +207,10 @@ def edit_pegawai(request, pegawai_id):
 
 # Fungsi Hapus Pegawai
 def delete_pegawai(request, id):
-    bidang = get_object_or_404(Bidang, id=id)
+    pegawai = get_object_or_404(Pegawai, id=id)
     if request.method == 'POST':
-        bidang.delete()
-        messages.success(request, 'Bidang berhasil dihapus!')
+        pegawai.delete()
+        messages.success(request, 'Pegawai berhasil dihapus!')
         return redirect('pegawai')  # Kembali ke halaman tabel
 
 # mengarahkan ke halaman kelola kriteria
