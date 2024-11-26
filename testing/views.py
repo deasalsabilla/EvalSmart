@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
-from .models import Bidang, Pegawai
+from .models import Bidang, Pegawai, Kriteria
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout
@@ -217,8 +217,24 @@ def delete_pegawai(request, id):
 def kriteria(request):
     return render(request, 'kriteria.html')
 
-# mengarahkan ke halaman tambah kriteria
+# fungsi tambah kriteria
 def tambah_kriteria(request):
+    if request.method == "POST":
+        # Ambil data dari input form
+        nama_kriteria = request.POST.get('nama_kriteria')
+        if nama_kriteria:  # Validasi jika nama_bidang tidak kosong
+            # Buat objek Bidang dan simpan ke database
+            Kriteria.objects.create(nama=nama_kriteria)
+            # Tambahkan pesan sukses
+            messages.success(request, "Kriteria berhasil ditambahkan!")
+            # Redirect ke halaman daftar bidang
+            return redirect('kriteria')
+
+        else:
+            # Tambahkan pesan error jika input kosong
+            messages.error(request, "Nama kriteria tidak boleh kosong.")
+            return redirect('tambah_kriteria')
+
     return render(request, 'tambah_kriteria.html')
 
 # mengarahkan ke halaman kelola penilaian

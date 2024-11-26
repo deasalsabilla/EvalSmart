@@ -64,7 +64,8 @@
                 <h5 class="card-title">Tambah Kriteria</h5>
 
                 <!-- Vertical Form -->
-                <form class="row g-3">
+                <form class="row g-3" method="post">
+                  {% csrf_token %}
                   <div class="col-12">
                     <label for="nama_kriteria" class="form-label">Nama Kriteria</label>
                     <input type="text" class="form-control" id="nama_kriteria" name="nama_kriteria"/>
