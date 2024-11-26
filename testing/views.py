@@ -215,7 +215,8 @@ def delete_pegawai(request, id):
 
 # mengarahkan ke halaman kelola kriteria
 def kriteria(request):
-    return render(request, 'kriteria.html')
+    kriterias = Kriteria.objects.all()
+    return render(request, 'kriteria.html', {'kriterias' : kriterias})
 
 # fungsi tambah kriteria
 def tambah_kriteria(request):

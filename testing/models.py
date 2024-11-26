@@ -30,10 +30,10 @@ class Pegawai(models.Model):
 class Kriteria(models.Model):
     id = models.AutoField(primary_key=True)  # ID otomatis
     nama = models.CharField(max_length=100)  # Nama kriteria
-    bobot = models.FloatField(null=True, blank=True)  # Bobot, default null
+    bobot = models.FloatField(default=0, null=False, blank=False)  # Bobot, default 0
 
     def __str__(self):
-        return f"{self.nama} (Bobot: {self.bobot if self.bobot is not None else 'Belum Ditentukan'})"
+        return f"{self.nama} (Bobot: {self.bobot})"
     
     class Meta:
         verbose_name_plural = "Kriteria"
