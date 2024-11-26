@@ -205,7 +205,7 @@ def edit_pegawai(request, pegawai_id):
 
     return render(request, 'edit_pegawai.html', {'pegawai': pegawai, 'bidang_list': bidang_list})
 
-# Fungsi Hapus Bidang
+# Fungsi Hapus Pegawai
 def delete_pegawai(request, id):
     bidang = get_object_or_404(Bidang, id=id)
     if request.method == 'POST':
@@ -237,6 +237,17 @@ def tambah_kriteria(request):
             return redirect('tambah_kriteria')
 
     return render(request, 'tambah_kriteria.html')
+
+# Fungsi Edit Kriteria
+def edit_kriteria(request, id):
+    kriteria = get_object_or_404(Kriteria, id=id)
+    if request.method == 'POST':
+        kriteria.nama = request.POST.get('nama', kriteria.nama)
+        kriteria.save()
+        messages.success(request, 'Kriteria berhasil diubah!')
+        return redirect('kriteria')  # Kembali ke halaman tabel
+    return render(request, 'edit_kriteria.html', {'kriteria': kriteria})
+
 
 # mengarahkan ke halaman kelola penilaian
 def penilaian(request):
