@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
+import json  # Untuk mengonversi data menjadi JSON
 
 # mengarahkan ke halaman beranda
 # Redirect ke halaman login jika belum login
@@ -248,7 +249,19 @@ def tambah_kriteria(request):
 
         if nama_kriteria and tipe_kriteria:  # Validasi jika nama_kriteria dan tipe_kriteria tidak kosong
             # Buat objek Kriteria dan simpan ke database
-            Kriteria.objects.create(nama=nama_kriteria, tipe=tipe_kriteria)
+            kriteria = Kriteria.objects.create(nama=nama_kriteria, tipe=tipe_kriteria)
+            
+            # Update kolom nilai di semua Penilaian
+            penilaian_list = Penilaian.objects.all()
+            for penilaian in penilaian_list:
+                # Load nilai dari JSON
+                nilai_dict = json.loads(penilaian.nilai) if penilaian.nilai else {}
+                # Tambahkan kriteria baru dengan nilai default 0
+                nilai_dict[kriteria.nama] = 0
+                # Simpan kembali ke database
+                penilaian.nilai = json.dumps(nilai_dict)
+                penilaian.save()
+
             # Tambahkan pesan sukses
             messages.success(request, "Kriteria berhasil ditambahkan!")
             # Redirect ke halaman daftar kriteria
@@ -336,9 +349,30 @@ def penilaian(request):
     penilaian_list = Penilaian.objects.all()
     return render(request, 'penilaian.html', {'penilaian_list': penilaian_list})
 
-def input_nilai(request):
-    kriteria_list = Kriteria.objects.all()  # Ambil semua data kriteria dari database
-    return render(request, 'input_nilai.html', {'kriteria_list': kriteria_list})
+def input_nilai(request, id):
+    penilaian = get_object_or_404(Penilaian, id=id)  # Ambil data Penilaian berdasarkan ID
+    kriteria_list = Kriteria.objects.all()          # Ambil semua kriteria
+    
+    if request.method == 'POST':
+        # Ambil nilai dari form input
+        nilai_dict = {}
+        for kriteria in kriteria_list:
+            nilai = request.POST.get(kriteria.nama)
+            if nilai:
+                nilai_dict[kriteria.nama] = int(nilai)  # Pastikan nilai berupa integer
+        
+        # Simpan data ke kolom nilai dalam format JSON
+        penilaian.nilai = json.dumps(nilai_dict)
+        penilaian.save()
+
+        # Redirect setelah berhasil menyimpan
+        return redirect('penilaian')  # Ganti dengan nama URL untuk halaman daftar penilaian
+
+    context = {
+        'penilaian': penilaian,
+        'kriteria_list': kriteria_list,
+    }
+    return render(request, 'input_nilai.html', context)
 
 # mengarahkan ke halaman pegawai terbaik
 def pegawai_terbaik(request):

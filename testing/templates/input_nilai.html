@@ -58,17 +58,18 @@
 
                 <!-- Form untuk menambah bidang -->
                 <form class="row g-3" method="post">
-                  {% csrf_token %}
-                  {% for kriteria in kriteria_list %}
+                    {% csrf_token %}
+                    {% for kriteria in kriteria_list %}
                     <div class="col-12">
-                      <label for="{{ kriteria.nama }}" class="form-label">{{ kriteria.nama }}</label>
-                      <input type="text" class="form-control" id="{{ kriteria.nama }}" name="{{ kriteria.nama }}" placeholder="Masukkan Nilai dalam skala 1-100" />
+                        <label for="{{ kriteria.nama }}" class="form-label">{{ kriteria.nama }}</label>
+                        <input type="number" class="form-control" id="{{ kriteria.nama }}" name="{{ kriteria.nama }}" 
+                               placeholder="Masukkan Nilai dalam skala 0-100" />
                     </div>
-                  {% endfor %}
-                  <div class="text-center">
-                    <button type="reset" class="btn btn-secondary">Reset</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                  </div>
+                    {% endfor %}
+                    <div class="text-center">
+                        <button type="reset" class="btn btn-secondary">Reset</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
                 </form>
               </div>
             </div>

@@ -29,13 +29,13 @@
     <!-- Template Main CSS File -->
     <link href="{% static 'assets/css/style.css' %}" rel="stylesheet" />
 
-    <!--  =======================================================
+    <!--   =======================================================
   * Template Name: NiceAdmin
   * Updated: Sep 18 2023 with Bootstrap v5.3.2
   * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
-  ========================================================  -->
+  ========================================================   -->
   </head>
 
   <body>
@@ -84,24 +84,24 @@
                   </thead>
                   <tbody>
                     {% for item in penilaian_list %}
-                    <tr>
-                      <th scope="row">{{ forloop.counter }}</th>
-                      <td>{{ item.nama.nama }}</td>
-                      <td>{{ item.bidang.nama }}</td>
-                      <td>
-                        {% if item.nilai %}
-                          {{ item.nilai }}
-                        {% else %}
-                          <span style="color: red;">Belum Ada Nilai</span>
-                        {% endif %}
-                      </td>
-                      <td>
-                        <a href="{% url 'input_nilai' %}" class="btn btn-primary btn-sm">Input Nilai</a>
-                      </td>
-                    </tr>
+                      <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ item.nama.nama }}</td>
+                        <td>{{ item.bidang.nama }}</td>
+                        <td>
+                          {% if item.nilai %}
+                            {{ item.nilai }}
+                          {% else %}
+                            <span style="color: red;">Belum Ada Nilai</span>
+                          {% endif %}
+                        </td>
+                        <td>
+                          <a href="{% url 'input_nilai' item.id %}" class="btn btn-primary btn-sm">Input Nilai</a>
+                        </td>
+                      </tr>
                     {% endfor %}
                   </tbody>
-                </table>                
+                </table>
                 <!-- End Table with stripped rows -->
               </div>
             </div>
