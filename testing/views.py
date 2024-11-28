@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
-from .models import Bidang, Pegawai, Kriteria
+from .models import Bidang, Pegawai, Kriteria, Penilaian
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout
@@ -163,13 +163,22 @@ def tambah_pegawai(request):
         # Validasi dan penyimpanan data
         try:
             bidang = Bidang.objects.get(id=bidang_id)  # Cari bidang berdasarkan ID
-            Pegawai.objects.create(
+            # Simpan data ke model Pegawai
+            pegawai = Pegawai.objects.create(
                 nomor_induk=nomor_induk,
                 nama=nama_pegawai,
                 alamat=alamat,
                 no_telp=no_hp,
                 bidang=bidang
             )
+
+            # Simpan data ke model Penilaian
+            Penilaian.objects.create(
+                nama=pegawai,
+                bidang=bidang,
+                nilai=None  # Biarkan nilai tetap kosong
+            )
+
             messages.success(request, "Pegawai berhasil ditambahkan.")
             return redirect('pegawai')  # Redirect ke halaman tambah pegawai
         except Bidang.DoesNotExist:

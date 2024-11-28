@@ -110,13 +110,13 @@
                         <!-- Tombol Hapus -->
                         <form action="{% url 'delete_pegawai' pegawai.id %}" method="post" style="display:inline;">
                           {% csrf_token %}
-                          <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus bidang ini?');"><i class="bi bi-trash"></i> Hapus</button>
+                          <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?');"><i class="bi bi-trash"></i> Hapus</button>
                         </form>
                       </td>
                     </tr>
                   {% empty %}
                     <tr>
-                      <td colspan="3" class="text-center">Tidak ada data</td>
+                      <td colspan="6" class="text-center">Tidak ada data</td>
                     </tr>
                   {% endfor %}
                   </tbody>
