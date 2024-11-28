@@ -101,7 +101,7 @@
                         <td>{{ kriteria.nama }}</td>
                         <td>{{ kriteria.bobot }}</td>
                         <td>
-                          <a href="{% url 'input_bobot' %}" class="btn btn-success btn-sm"><i class="ri-add-box-fill"></i> Input Bobot</a>
+                          <a href="{% url 'input_bobot' kriteria.id %}" class="btn btn-success btn-sm"><i class="ri-add-box-fill"></i> Input Bobot</a>
                           <!-- Tombol Edit -->
                           <a href="{% url 'edit_kriteria' kriteria.id %}" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i> Edit</a>
 

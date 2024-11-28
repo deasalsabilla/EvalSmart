@@ -258,11 +258,14 @@ def delete_kriteria(request, id):
         return redirect('kriteria')  # Kembali ke halaman tabel
     
 # fungsi input bobot
-def input_bobot(request):
+def input_bobot(request, kriteria_id):
+    # Ambil kriteria berdasarkan ID
+    kriteria = get_object_or_404(Kriteria, id=kriteria_id)
+
     if request.method == "POST":
         try:
-            bobot_baru = float(request.POST.get('bobot', 0))  # Ambil input bobot dari form
-            total_bobot_sekarang = Kriteria.objects.aggregate(total=Sum('bobot'))['total'] or 0
+            bobot_baru = float(request.POST.get('bobot', 0))  # Ambil bobot baru dari form
+            total_bobot_sekarang = Kriteria.objects.exclude(id=kriteria.id).aggregate(total=Sum('bobot'))['total'] or 0
 
             # Hitung total bobot jika bobot baru ditambahkan
             total_bobot_setelah_input = total_bobot_sekarang + bobot_baru
@@ -274,19 +277,19 @@ def input_bobot(request):
                     f"Bobot yang Anda masukkan melebihi batas. Maksimal yang bisa ditambahkan adalah {100 - total_bobot_sekarang:.2f}%."
                 )
             else:
-                # Simpan bobot baru
-                kriteria = Kriteria.objects.latest('id')  # Ambil kriteria terakhir yang dibuat
+                # Simpan bobot baru ke kriteria yang sudah ada
                 kriteria.bobot = bobot_baru
                 kriteria.save()
 
-                messages.success(request, "Bobot berhasil ditambahkan.")
+                messages.success(request, f"Bobot untuk {kriteria.nama} berhasil diperbarui.")
                 return redirect('kriteria')  # Ganti dengan URL yang sesuai
         except ValueError:
             messages.error(request, "Bobot harus berupa angka yang valid.")
     
     # Data untuk ditampilkan di template
-    total_bobot_sekarang = Kriteria.objects.aggregate(total=Sum('bobot'))['total'] or 0
+    total_bobot_sekarang = Kriteria.objects.exclude(id=kriteria.id).aggregate(total=Sum('bobot'))['total'] or 0
     context = {
+        'kriteria': kriteria,
         'total_bobot_sekarang': total_bobot_sekarang,
         'bobot_maksimal': 100 - total_bobot_sekarang,
     }

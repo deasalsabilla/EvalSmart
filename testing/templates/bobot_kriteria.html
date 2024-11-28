@@ -29,13 +29,13 @@
     <!-- Template Main CSS File -->
     <link href="{% static 'assets/css/style.css' %}" rel="stylesheet" />
 
-    <!--   =======================================================
+    <!--     =======================================================
   * Template Name: NiceAdmin
   * Updated: Sep 18 2023 with Bootstrap v5.3.2
   * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
-  ========================================================   -->
+  ========================================================     -->
   </head>
 
   <body>
@@ -44,7 +44,7 @@
 
     <main id="main" class="main">
       <div class="pagetitle">
-        <h1>Edit Kriteria</h1>
+        <h1>Input Bobot Kriteria</h1>
         <nav>
           <ol class="breadcrumb">
             <li class="breadcrumb-item">
@@ -65,25 +65,17 @@
 
                 <!-- Vertical Form -->
                 <form class="row g-3" method="post">
-                    {% csrf_token %}
-                    <div class="col-12">
-                        <label for="bobot" class="form-label">Bobot (%)</label>
-                        <input 
-                            type="number" 
-                            class="form-control" 
-                            id="bobot" 
-                            name="bobot" 
-                            step="0.01" 
-                            max="{{ bobot_maksimal }}" 
-                            required
-                        />
-                    </div>
-                    <p>Total Bobot Saat Ini: {{ total_bobot_sekarang }}%</p>
-                    <p>Maksimal Bobot yang Bisa Ditambahkan: {{ bobot_maksimal }}%</p>
-                    <div class="text-center">
-                        <button type="reset" class="btn btn-secondary">Reset</button>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
+                  {% csrf_token %}
+                  <div class="col-12">
+                    <label for="bobot" class="form-label">Bobot (%)</label>
+                    <input type="number" class="form-control" id="bobot" name="bobot" step="0.01" value="{{ kriteria.bobot }}" max="{{ bobot_maksimal }}" required />
+                  </div>
+                  <p>Total Bobot Saat Ini (tanpa kriteria ini): {{ total_bobot_sekarang }}%</p>
+                  <p>Maksimal Bobot yang Bisa Ditambahkan: {{ bobot_maksimal }}%</p>
+                  <div class="text-center">
+                    <button type="reset" class="btn btn-secondary">Reset</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                  </div>
                 </form>
                 <!-- Vertical Form -->
               </div>
