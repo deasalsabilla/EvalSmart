@@ -44,13 +44,13 @@
 
     <main id="main" class="main">
       <div class="pagetitle">
-        <h1>Kelola Kriteria</h1>
+        <h1>Kelola Kriteria & Bobot</h1>
         <nav>
           <ol class="breadcrumb">
             <li class="breadcrumb-item">
               <a href="{% url 'home' %}">Beranda</a>
             </li>
-            <li class="breadcrumb-item active">Kelola Kriteria</li>
+            <li class="breadcrumb-item active">Kelola Kriteria & Bobot</li>
           </ol>
         </nav>
       </div>
@@ -90,6 +90,7 @@
                     <tr>
                       <th scope="col">No</th>
                       <th scope="col">Nama Kriteria</th>
+                      <th scope="col">Tipe Kriteria</th>
                       <th scope="col">Bobot</th>
                       <th scope="col">Aksi</th>
                     </tr>
@@ -99,6 +100,7 @@
                       <tr>
                         <td>{{ forloop.counter }}</td>
                         <td>{{ kriteria.nama }}</td>
+                        <td>{{ kriteria.tipe }}</td>
                         <td>{{ kriteria.bobot }}</td>
                         <td>
                           <a href="{% url 'input_bobot' kriteria.id %}" class="btn btn-success btn-sm"><i class="ri-add-box-fill"></i> Input Bobot</a>

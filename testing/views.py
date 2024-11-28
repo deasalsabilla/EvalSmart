@@ -224,17 +224,19 @@ def tambah_kriteria(request):
     if request.method == "POST":
         # Ambil data dari input form
         nama_kriteria = request.POST.get('nama_kriteria')
-        if nama_kriteria:  # Validasi jika nama_bidang tidak kosong
-            # Buat objek Bidang dan simpan ke database
-            Kriteria.objects.create(nama=nama_kriteria)
+        tipe_kriteria = request.POST.get('tipe_kriteria')  # Ambil tipe kriteria dari form
+
+        if nama_kriteria and tipe_kriteria:  # Validasi jika nama_kriteria dan tipe_kriteria tidak kosong
+            # Buat objek Kriteria dan simpan ke database
+            Kriteria.objects.create(nama=nama_kriteria, tipe=tipe_kriteria)
             # Tambahkan pesan sukses
             messages.success(request, "Kriteria berhasil ditambahkan!")
-            # Redirect ke halaman daftar bidang
+            # Redirect ke halaman daftar kriteria
             return redirect('kriteria')
 
         else:
             # Tambahkan pesan error jika input kosong
-            messages.error(request, "Nama kriteria tidak boleh kosong.")
+            messages.error(request, "Nama kriteria dan tipe kriteria tidak boleh kosong.")
             return redirect('tambah_kriteria')
 
     return render(request, 'tambah_kriteria.html')
@@ -243,10 +245,23 @@ def tambah_kriteria(request):
 def edit_kriteria(request, id):
     kriteria = get_object_or_404(Kriteria, id=id)
     if request.method == 'POST':
-        kriteria.nama = request.POST.get('nama', kriteria.nama)
+        # Ambil data dari form
+        nama_kriteria = request.POST.get('nama', kriteria.nama)
+        tipe_kriteria = request.POST.get('tipe', kriteria.tipe)
+
+        # Validasi tipe kriteria
+        if tipe_kriteria not in ['benefit', 'cost']:
+            messages.error(request, "Tipe kriteria tidak valid.")
+            return redirect('edit_kriteria', id=id)
+
+        # Simpan perubahan
+        kriteria.nama = nama_kriteria
+        kriteria.tipe = tipe_kriteria
         kriteria.save()
         messages.success(request, 'Kriteria berhasil diubah!')
         return redirect('kriteria')  # Kembali ke halaman tabel
+
+    # Data untuk template
     return render(request, 'edit_kriteria.html', {'kriteria': kriteria})
 
 # Fungsi Hapus Kriteria

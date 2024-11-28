@@ -28,12 +28,18 @@ class Pegawai(models.Model):
         ordering = ['nama']
         
 class Kriteria(models.Model):
+    TIPE_CHOICES = [
+        ('benefit', 'Benefit'),
+        ('cost', 'Cost'),
+    ]
+
     id = models.AutoField(primary_key=True)  # ID otomatis
     nama = models.CharField(max_length=100)  # Nama kriteria
     bobot = models.FloatField(default=0, null=False, blank=False)  # Bobot, default 0
+    tipe = models.CharField(max_length=10, choices=TIPE_CHOICES, default='benefit')  # Tipe kriteria (Benefit/Cost)
 
     def __str__(self):
-        return f"{self.nama} (Bobot: {self.bobot})"
+        return f"{self.nama} (Bobot: {self.bobot}, Tipe: {self.get_tipe_display()})"
     
     class Meta:
         verbose_name_plural = "Kriteria"
