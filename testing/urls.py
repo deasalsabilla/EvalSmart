@@ -41,6 +41,7 @@ urlpatterns = [
     path('kriteria/hapus-kriteria/<int:id>/', views.delete_kriteria, name='delete_kriteria'),
     path('kriteria/<int:kriteria_id>/input-bobot/', views.input_bobot, name='input_bobot'),
     path("penilaian/", views.penilaian, name="penilaian"),
+    path("penilaian/input-nilai/", views.input_nilai, name="input_nilai"),
     path("penilaian/pegawai-terbaik/", views.pegawai_terbaik, name="pegawai_terbaik"),
     path("riwayat/", views.riwayat, name="riwayat"),
 ]

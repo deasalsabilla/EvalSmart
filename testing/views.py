@@ -217,11 +217,22 @@ def edit_pegawai(request, pegawai_id):
 
 # Fungsi Hapus Pegawai
 def delete_pegawai(request, id):
+    # Ambil data pegawai berdasarkan id
     pegawai = get_object_or_404(Pegawai, id=id)
+    
     if request.method == 'POST':
+        # Hapus semua data penilaian yang terkait dengan pegawai
+        penilaian_terkait = Penilaian.objects.filter(nama=pegawai)  # Ubah 'pegawai' menjadi 'nama'
+        penilaian_terkait.delete()
+        
+        # Hapus data pegawai
         pegawai.delete()
-        messages.success(request, 'Pegawai berhasil dihapus!')
-        return redirect('pegawai')  # Kembali ke halaman tabel
+        
+        # Kirim pesan sukses
+        messages.success(request, 'Pegawai dan data penilaian terkait berhasil dihapus!')
+        
+        # Redirect ke halaman tabel pegawai
+        return redirect('pegawai')
 
 # mengarahkan ke halaman kelola kriteria
 def kriteria(request):
@@ -321,7 +332,13 @@ def input_bobot(request, kriteria_id):
 
 # mengarahkan ke halaman kelola penilaian
 def penilaian(request):
-    return render(request, 'penilaian.html')
+    # Ambil semua data dari model Penilaian
+    penilaian_list = Penilaian.objects.all()
+    return render(request, 'penilaian.html', {'penilaian_list': penilaian_list})
+
+def input_nilai(request):
+    kriteria_list = Kriteria.objects.all()  # Ambil semua data kriteria dari database
+    return render(request, 'input_nilai.html', {'kriteria_list': kriteria_list})
 
 # mengarahkan ke halaman pegawai terbaik
 def pegawai_terbaik(request):
