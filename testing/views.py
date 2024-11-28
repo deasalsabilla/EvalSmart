@@ -313,9 +313,25 @@ def edit_kriteria(request, id):
 def delete_kriteria(request, id):
     kriteria = get_object_or_404(Kriteria, id=id)
     if request.method == 'POST':
+        penilaian_list = Penilaian.objects.all()
+
+        # Hapus kriteria dari kolom nilai pada setiap Penilaian
+        for penilaian in penilaian_list:
+            if penilaian.nilai:  # Pastikan kolom nilai tidak kosong
+                nilai_dict = json.loads(penilaian.nilai)  # Parse JSON ke dictionary
+                if kriteria.nama in nilai_dict:  # Cek apakah kriteria ada di nilai
+                    del nilai_dict[kriteria.nama]  # Hapus kriteria dari dictionary
+                    penilaian.nilai = json.dumps(nilai_dict)  # Simpan kembali dalam format JSON
+                    penilaian.save()
+
+        # Hapus kriteria dari database
         kriteria.delete()
         messages.success(request, 'Kriteria berhasil dihapus!')
         return redirect('kriteria')  # Kembali ke halaman tabel
+
+    # Data untuk konfirmasi penghapusan
+    return render(request, 'delete_kriteria.html', {'kriteria': kriteria})
+
     
 # fungsi input bobot
 def input_bobot(request, kriteria_id):
