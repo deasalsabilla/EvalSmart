@@ -28,14 +28,16 @@
 
     <!-- Template Main CSS File -->
     <link href="{% static 'assets/css/style.css' %}" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
-    <!--   =======================================================
+
+    <!--      =======================================================
   * Template Name: NiceAdmin
   * Updated: Sep 18 2023 with Bootstrap v5.3.2
   * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
-  ========================================================   -->
+  ========================================================      -->
   </head>
 
   <body>
@@ -85,18 +87,22 @@
                   <tbody>
                     {% for item in penilaian_list %}
                       <tr>
-                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ forloop.counter }}</td>
                         <td>{{ item.nama.nama }}</td>
                         <td>{{ item.bidang.nama }}</td>
                         <td>
                           {% if item.nilai %}
-                            {{ item.nilai }}
+                            <a href="" class="btn btn-success btn-sm"><i class="fas fa-eye"></i> Lihat Nilai</a>
                           {% else %}
                             <span style="color: red;">Belum Ada Nilai</span>
                           {% endif %}
                         </td>
                         <td>
-                          <a href="{% url 'input_nilai' item.id %}" class="btn btn-primary btn-sm">Input Nilai</a>
+                          {% if item.nilai %}
+                            <a href="{% url 'input_nilai' item.id %}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Edit Nilai</a>
+                          {% else %}
+                            <a href="{% url 'input_nilai' item.id %}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Input Nilai</a>
+                          {% endif %}
                         </td>
                       </tr>
                     {% endfor %}
