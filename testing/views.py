@@ -279,7 +279,7 @@ def edit_kriteria(request, id):
     kriteria = get_object_or_404(Kriteria, id=id)
     if request.method == 'POST':
         # Ambil data dari form
-        nama_kriteria = request.POST.get('nama', kriteria.nama)
+        nama_kriteria_baru = request.POST.get('nama', kriteria.nama)
         tipe_kriteria = request.POST.get('tipe', kriteria.tipe)
 
         # Validasi tipe kriteria
@@ -287,10 +287,22 @@ def edit_kriteria(request, id):
             messages.error(request, "Tipe kriteria tidak valid.")
             return redirect('edit_kriteria', id=id)
 
-        # Simpan perubahan
-        kriteria.nama = nama_kriteria
+        # Jika nama kriteria diubah, update kolom nilai pada Penilaian
+        if nama_kriteria_baru != kriteria.nama:
+            penilaian_list = Penilaian.objects.all()
+            for penilaian in penilaian_list:
+                if penilaian.nilai:  # Pastikan kolom nilai tidak kosong
+                    nilai_dict = json.loads(penilaian.nilai)  # Parse JSON ke dictionary
+                    if kriteria.nama in nilai_dict:  # Cek apakah kriteria ada di nilai
+                        nilai_dict[nama_kriteria_baru] = nilai_dict.pop(kriteria.nama)  # Ganti nama kriteria
+                        penilaian.nilai = json.dumps(nilai_dict)  # Simpan kembali dalam format JSON
+                        penilaian.save()
+
+        # Simpan perubahan pada model Kriteria
+        kriteria.nama = nama_kriteria_baru
         kriteria.tipe = tipe_kriteria
         kriteria.save()
+        
         messages.success(request, 'Kriteria berhasil diubah!')
         return redirect('kriteria')  # Kembali ke halaman tabel
 
