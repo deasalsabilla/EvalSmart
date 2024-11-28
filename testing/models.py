@@ -1,5 +1,4 @@
 from django.db import models
-# from django.contrib.auth.models import User
 
 class Bidang(models.Model):
     id = models.AutoField(primary_key=True)
@@ -44,3 +43,16 @@ class Kriteria(models.Model):
     class Meta:
         verbose_name_plural = "Kriteria"
         ordering = ['nama']  # Urutkan berdasarkan nama secara default
+    
+class Penilaian(models.Model):
+    id = models.AutoField(primary_key=True)  # ID otomatis
+    nama = models.ForeignKey('Pegawai', on_delete=models.CASCADE)  # Relasi ke tabel Pegawai
+    bidang = models.ForeignKey('Bidang', on_delete=models.CASCADE)  # Relasi ke tabel Bidang
+    nilai = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Penilaian {self.nama.nama} - {self.bidang.nama}"
+    
+    class Meta:
+        verbose_name_plural = "Penilaian"
+        ordering = ['id']
