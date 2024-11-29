@@ -43,6 +43,7 @@ urlpatterns = [
     path("penilaian/", views.penilaian, name="penilaian"),
     path("penilaian/input-nilai/<int:id>/", views.input_nilai, name="input_nilai"),
     path("penilaian/lihat-nilai/<int:penilaian_id>/", views.lihat_nilai, name="lihat_nilai"),
+    path("penilaian/edit-nilai/<int:id>/", views.edit_nilai, name="edit_nilai"),
     path("penilaian/pegawai-terbaik/", views.pegawai_terbaik, name="pegawai_terbaik"),
     path("riwayat/", views.riwayat, name="riwayat"),
 ]

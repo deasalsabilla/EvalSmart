@@ -99,7 +99,7 @@
                         </td>
                         <td>
                           {% if item.nilai %}
-                            <a href="{% url 'input_nilai' item.id %}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Edit Nilai</a>
+                            <a href="{% url 'edit_nilai' item.id %}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Edit Nilai</a>
                           {% else %}
                             <a href="{% url 'input_nilai' item.id %}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Input Nilai</a>
                           {% endif %}

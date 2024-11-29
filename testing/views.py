@@ -439,6 +439,43 @@ def lihat_nilai(request, penilaian_id):
     }
     return render(request, 'lihat_nilai.html', context)
 
+def edit_nilai(request, id):
+    # Ambil data penilaian berdasarkan ID
+    penilaian = get_object_or_404(Penilaian, id=id)
+
+    # Ambil daftar kriteria
+    kriteria_list = Kriteria.objects.all()
+
+    # Muat nilai dari kolom nilai (format JSON) jika tidak kosong
+    nilai_dict = json.loads(penilaian.nilai) if penilaian.nilai else {}
+
+    # Buat pasangan (kriteria, nilai) untuk akses lebih mudah di template
+    nilai_data = [(kriteria.nama, nilai_dict.get(kriteria.nama, '')) for kriteria in kriteria_list]
+
+    if request.method == "POST":
+        try:
+            # Perbarui nilai berdasarkan input dari form
+            for kriteria in kriteria_list:
+                nilai_input = request.POST.get(kriteria.nama)
+                if nilai_input:
+                    nilai_dict[kriteria.nama] = int(nilai_input)  # Simpan nilai sebagai integer
+            
+            # Simpan kembali nilai ke database
+            penilaian.nilai = json.dumps(nilai_dict)
+            penilaian.save()
+
+            messages.success(request, "Nilai berhasil diperbarui!")
+            return redirect('lihat_nilai', penilaian.id)
+
+        except Exception as e:
+            messages.error(request, f"Terjadi kesalahan: {str(e)}")
+
+    context = {
+        'penilaian': penilaian,
+        'nilai_data': nilai_data,  # Data (kriteria, nilai)
+    }
+    return render(request, 'edit_nilai.html', context)
+
 # mengarahkan ke halaman pegawai terbaik
 def pegawai_terbaik(request):
     return render(request, 'pegawai_terbaik.html')
