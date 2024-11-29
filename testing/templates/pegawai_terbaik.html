@@ -29,13 +29,13 @@
     <!-- Template Main CSS File -->
     <link href="{% static 'assets/css/style.css' %}" rel="stylesheet" />
 
-    <!--    =======================================================
+    <!--     =======================================================
   * Template Name: NiceAdmin
   * Updated: Sep 18 2023 with Bootstrap v5.3.2
   * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
-  ========================================================    -->
+  ========================================================     -->
   </head>
 
   <body>
@@ -61,33 +61,17 @@
           <div class="col-lg-6">
             <div class="card">
               <div class="card-body">
-                <h5 class="card-title">Tambah Kriteria</h5>
+                <h5 class="card-title">Pegawai Terbaik</h5>
 
                 <!-- Vertical Form -->
-                <form class="row g-3">
+                <form method="POST" action="{% url 'pegawai_terbaik' %}" class="row g-3">
+                  {% csrf_token %}
                   <div class="col-12">
                     <label for="tahun_nilai" class="form-label">Tahun Penilaian</label>
-                    <input type="number" class="form-control" id="tahun_nilai" />
+                    <input type="number" class="form-control" id="tahun_nilai" name="tahun_nilai" required />
                   </div>
-                  <!-- Button trigger modal -->
-                  <button type="button" class="btn btn-primary col-lg-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Submit</button>
-
-                  <!-- Modal -->
-                  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h1 class="modal-title fs-5" id="staticBackdropLabel">Pegawai Terbaik Tahun ini</h1>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">...</div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-primary">Selesai</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </form>
+                  <button type="submit" class="btn btn-primary">Simpan</button>
+                </form>                
                 <!-- Vertical Form -->
               </div>
             </div>

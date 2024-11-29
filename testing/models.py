@@ -61,10 +61,10 @@ class Penilaian(models.Model):
         ordering = ['id']
         
 class PegawaiTerbaik(models.Model):
-    id = models.AutoField(primary_key=True)  # ID otomatis
+    id = models.AutoField(primary_key=True)
     nama = models.CharField(max_length=100)  # Nama pegawai
     bidang = models.CharField(max_length=100)  # Nama bidang
-    normalisasi_nilai = models.FloatField()  # Normalisasi nilai (disimpan sebagai JSON)
+    normalisasi_nilai = models.TextField()  # Normalisasi nilai dalam bentuk JSON string
     nilai_preferensi = models.FloatField()  # Nilai preferensi pegawai
     tahun_penilaian = models.IntegerField()  # Tahun penilaian (input dari user)
 
