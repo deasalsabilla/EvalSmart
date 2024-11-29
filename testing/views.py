@@ -191,22 +191,41 @@ def tambah_pegawai(request):
     bidang_list = Bidang.objects.all()
     return render(request, 'tambah_pegawai.html', {'bidang_list': bidang_list})
 
-# FUNGSI EDIT PEGAWAI
 def edit_pegawai(request, pegawai_id):
     pegawai = get_object_or_404(Pegawai, id=pegawai_id)  # Ambil data pegawai berdasarkan ID
     bidang_list = Bidang.objects.all()  # Ambil semua bidang untuk dropdown
 
     if request.method == "POST":
         # Ambil data dari form
-        pegawai.nomor_induk = request.POST.get('nomor_induk')
-        pegawai.nama = request.POST.get('nama_pegawai')
-        pegawai.alamat = request.POST.get('alamat')
-        pegawai.no_telp = request.POST.get('no_hp')
-
+        nomor_induk = request.POST.get('nomor_induk')
+        nama_pegawai = request.POST.get('nama_pegawai')
+        alamat = request.POST.get('alamat')
+        no_hp = request.POST.get('no_hp')
         bidang_id = request.POST.get('pilih_bidang')
+
         try:
-            pegawai.bidang = Bidang.objects.get(id=bidang_id)  # Update bidang berdasarkan ID yang dipilih
+            bidang_baru = Bidang.objects.get(id=bidang_id)
+
+            # Cek perubahan nama dan bidang
+            nama_lama = pegawai.nama
+            bidang_lama = pegawai.bidang
+
+            # Update data pegawai
+            pegawai.nomor_induk = nomor_induk
+            pegawai.nama = nama_pegawai
+            pegawai.alamat = alamat
+            pegawai.no_telp = no_hp
+            pegawai.bidang = bidang_baru
             pegawai.save()  # Simpan perubahan ke database
+
+            # Update model Penilaian jika nama atau bidang berubah
+            if nama_pegawai != nama_lama or bidang_baru != bidang_lama:
+                penilaian_terkait = Penilaian.objects.filter(nama=pegawai)
+                for penilaian in penilaian_terkait:
+                    penilaian.nama = pegawai  # Nama terkait otomatis berubah
+                    penilaian.bidang = bidang_baru  # Bidang terkait diperbarui
+                    penilaian.save()
+
             messages.success(request, "Data pegawai berhasil diperbarui.")
             return redirect('pegawai')  # Redirect ke halaman daftar pegawai (atau lainnya)
         except Bidang.DoesNotExist:
@@ -230,7 +249,7 @@ def delete_pegawai(request, id):
         pegawai.delete()
         
         # Kirim pesan sukses
-        messages.success(request, 'Pegawai dan data penilaian terkait berhasil dihapus!')
+        messages.success(request, 'Pegawai berhasil dihapus!')
         
         # Redirect ke halaman tabel pegawai
         return redirect('pegawai')
@@ -401,6 +420,9 @@ def input_nilai(request, id):
         'kriteria_list': kriteria_list,
     }
     return render(request, 'input_nilai.html', context)
+
+def lihat_nilai(request):
+    return render(request, 'lihat_nilai.html')
 
 # mengarahkan ke halaman pegawai terbaik
 def pegawai_terbaik(request):
