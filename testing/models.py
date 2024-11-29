@@ -59,3 +59,18 @@ class Penilaian(models.Model):
     class Meta:
         verbose_name_plural = "Penilaian"
         ordering = ['id']
+        
+class PegawaiTerbaik(models.Model):
+    id = models.AutoField(primary_key=True)  # ID otomatis
+    nama = models.CharField(max_length=100)  # Nama pegawai
+    bidang = models.CharField(max_length=100)  # Nama bidang
+    normalisasi_nilai = models.FloatField()  # Normalisasi nilai (disimpan sebagai JSON)
+    nilai_preferensi = models.FloatField()  # Nilai preferensi pegawai
+    tahun_penilaian = models.IntegerField()  # Tahun penilaian (input dari user)
+
+    def __str__(self):
+        return f"{self.nama} - {self.nilai_preferensi:.2f} ({self.tahun_penilaian})"
+
+    class Meta:
+        verbose_name_plural = "Pegawai Terbaik"
+        ordering = ['-tahun_penilaian', '-nilai_preferensi']
