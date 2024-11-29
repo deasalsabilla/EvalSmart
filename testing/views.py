@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 import json  # Untuk mengonversi data menjadi JSON
+import ast  # Untuk parsing string dictionary
 
 # mengarahkan ke halaman beranda
 # Redirect ke halaman login jika belum login
@@ -421,8 +422,21 @@ def input_nilai(request, id):
     }
     return render(request, 'input_nilai.html', context)
 
-def lihat_nilai(request):
-    return render(request, 'lihat_nilai.html')
+def lihat_nilai(request, penilaian_id):
+    # Ambil data penilaian berdasarkan ID
+    penilaian = get_object_or_404(Penilaian, id=penilaian_id)
+
+    # Parsing kolom nilai dari string ke dictionary
+    try:
+        nilai_dict = ast.literal_eval(penilaian.nilai) if penilaian.nilai else {}
+    except Exception:
+        nilai_dict = {}
+
+    context = {
+        'penilaian': penilaian,
+        'nilai_dict': nilai_dict,
+    }
+    return render(request, 'lihat_nilai.html', context)
 
 # mengarahkan ke halaman pegawai terbaik
 def pegawai_terbaik(request):
