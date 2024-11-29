@@ -274,13 +274,14 @@ def tambah_kriteria(request):
             # Update kolom nilai di semua Penilaian
             penilaian_list = Penilaian.objects.all()
             for penilaian in penilaian_list:
-                # Load nilai dari JSON
-                nilai_dict = json.loads(penilaian.nilai) if penilaian.nilai else {}
-                # Tambahkan kriteria baru dengan nilai default 0
-                nilai_dict[kriteria.nama] = 0
-                # Simpan kembali ke database
-                penilaian.nilai = json.dumps(nilai_dict)
-                penilaian.save()
+                if penilaian.nilai:  # Cek jika kolom nilai tidak kosong
+                    # Load nilai dari JSON
+                    nilai_dict = json.loads(penilaian.nilai)
+                    # Tambahkan kriteria baru dengan nilai default 0
+                    nilai_dict[kriteria.nama] = 0
+                    # Simpan kembali ke database
+                    penilaian.nilai = json.dumps(nilai_dict)
+                    penilaian.save()
 
             # Tambahkan pesan sukses
             messages.success(request, "Kriteria berhasil ditambahkan!")
