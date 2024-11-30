@@ -493,14 +493,14 @@ def pegawai_terbaik(request):
         total_bobot = sum([k.bobot for k in kriteria])
         if total_bobot != 100:
             messages.error(request, "Total bobot kriteria harus 100%. Harap perbaiki bobot kriteria.")
-            return redirect("kriteria")  # Redirect ke halaman pengaturan kriteria
+            return redirect("kriteria")
 
         # Validasi apakah semua nilai pada model Penilaian sudah terisi
         penilaian = Penilaian.objects.all()
         for p in penilaian:
             if not p.nilai:
                 messages.error(request, f"Nilai untuk pegawai {p.nama} belum lengkap. Harap isi nilai terlebih dahulu.")
-                return redirect("penilaian")  # Redirect ke halaman pengisian nilai
+                return redirect("penilaian")
 
         # Hapus data PegawaiTerbaik pada tahun yang sama sebelum menyimpan data baru
         PegawaiTerbaik.objects.filter(tahun_penilaian=tahun_penilaian).delete()
@@ -508,14 +508,11 @@ def pegawai_terbaik(request):
         # Hitung min dan max nilai untuk setiap kriteria berdasarkan tipe
         min_max_per_kriteria = {}
         for k in kriteria:
-            # Ambil semua nilai untuk kriteria tertentu dari semua penilaian
             nilai_kriteria = []
             for p in penilaian:
                 nilai_dict = json.loads(p.nilai)
-                if k.nama in nilai_dict:  # Pastikan nilai kriteria ada di data
+                if k.nama in nilai_dict:
                     nilai_kriteria.append(nilai_dict[k.nama])
-
-            # Simpan nilai min dan max berdasarkan tipe kriteria
             min_max_per_kriteria[k.nama] = {
                 'min': min(nilai_kriteria) if nilai_kriteria else 0,
                 'max': max(nilai_kriteria) if nilai_kriteria else 0,
@@ -523,16 +520,15 @@ def pegawai_terbaik(request):
 
         # Proses perhitungan normalisasi dan preferensi
         for p in penilaian:
-            nilai_dict = json.loads(p.nilai)  # Nilai disimpan dalam bentuk JSON
+            nilai_dict = json.loads(p.nilai)
             normalisasi = {}
             nilai_preferensi = 0
 
             for k in kriteria:
-                nilai = nilai_dict.get(k.nama, 0)  # Ambil nilai untuk kriteria tertentu
+                nilai = nilai_dict.get(k.nama, 0)
                 max_nilai = min_max_per_kriteria[k.nama]['max']
                 min_nilai = min_max_per_kriteria[k.nama]['min']
 
-                # Hitung normalisasi nilai berdasarkan tipe kriteria
                 if k.tipe == 'benefit' and max_nilai > 0:
                     normalisasi_nilai = nilai / max_nilai
                 elif k.tipe == 'cost' and nilai > 0:
@@ -540,25 +536,28 @@ def pegawai_terbaik(request):
                 else:
                     normalisasi_nilai = 0
 
-                # Simpan hasil normalisasi
                 normalisasi[k.nama] = normalisasi_nilai
-
-                # Hitung nilai preferensi
                 nilai_preferensi += normalisasi_nilai * (k.bobot / 100)
 
-            # Simpan data ke PegawaiTerbaik
             PegawaiTerbaik.objects.create(
                 nama=p.nama.nama,
                 bidang=p.bidang.nama,
-                normalisasi_nilai=json.dumps(normalisasi),  # Simpan dictionary sebagai JSON string
+                normalisasi_nilai=json.dumps(normalisasi),
                 nilai_preferensi=nilai_preferensi,
                 tahun_penilaian=tahun_penilaian,
             )
 
-        messages.success(request, "Data Pegawai Terbaik berhasil diperbarui.")
-        return redirect("penilaian")  # Redirect ke halaman daftar pegawai terbaik
+        # Ambil 10 pegawai terbaik berdasarkan nilai preferensi
+        pegawai_terbaik = PegawaiTerbaik.objects.filter(
+            tahun_penilaian=tahun_penilaian
+        ).order_by('-nilai_preferensi')[:10]
+
+        return render(request, 'pegawai_terbaik.html', {
+            'pegawai_terbaik': pegawai_terbaik,
+        })
 
     return render(request, 'pegawai_terbaik.html')
+
 
 # mengarahkan ke halaman riwayat
 def riwayat(request):
