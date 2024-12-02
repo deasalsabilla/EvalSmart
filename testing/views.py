@@ -414,6 +414,7 @@ def input_nilai(request, id):
         penilaian.nilai = json.dumps(nilai_dict)
         penilaian.save()
 
+        messages.success(request, 'Nilai Berhasil ditambahkan!')
         # Redirect setelah berhasil menyimpan
         return redirect('penilaian')  # Ganti dengan nama URL untuk halaman daftar penilaian
 
