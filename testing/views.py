@@ -1,7 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
-from .models import Bidang, Pegawai, Kriteria, Penilaian, PegawaiTerbaik
-from django.http import HttpResponse
+from .models import Bidang, Pegawai, Kriteria, Penilaian, PegawaiTerbaik, RiwayatPenilaian
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required
@@ -496,15 +495,28 @@ def pegawai_terbaik(request):
             messages.error(request, "Total bobot kriteria harus 100%. Harap perbaiki bobot kriteria.")
             return redirect("kriteria")
 
-        # Validasi apakah semua nilai pada model Penilaian sudah terisi
+        # Validasi apakah semua nilai di Penilaian sesuai dengan tahun_penilaian
         penilaian = Penilaian.objects.all()
+        riwayat_penilaian_tahun_ini = RiwayatPenilaian.objects.filter(tahun_penilaian=tahun_penilaian)
+
+        if riwayat_penilaian_tahun_ini.exists():
+            messages.error(request, f"Riwayat penilaian untuk tahun {tahun_penilaian} sudah ada. Harap reset penilaian jika ingin memulai ulang.")
+            return redirect("penilaian")
+
         for p in penilaian:
-            if not p.nilai:
-                messages.error(request, f"Nilai untuk pegawai {p.nama} belum lengkap. Harap isi nilai terlebih dahulu.")
+            nilai_dict = json.loads(p.nilai) if p.nilai else {}
+            if not nilai_dict or not all(isinstance(val, (int, float)) for val in nilai_dict.values()):
+                messages.error(request, f"Nilai untuk pegawai {p.nama.nama} belum lengkap atau tidak valid. Harap isi nilai dengan benar untuk tahun {tahun_penilaian}.")
                 return redirect("penilaian")
 
-        # Hapus data PegawaiTerbaik pada tahun yang sama sebelum menyimpan data baru
-        PegawaiTerbaik.objects.filter(tahun_penilaian=tahun_penilaian).delete()
+        # Simpan semua data penilaian ke dalam model RiwayatPenilaian
+        for p in penilaian:
+            RiwayatPenilaian.objects.create(
+                nama=p.nama,
+                bidang=p.bidang,
+                nilai=p.nilai,
+                tahun_penilaian=tahun_penilaian,
+            )
 
         # Hitung min dan max nilai untuk setiap kriteria berdasarkan tipe
         min_max_per_kriteria = {}
@@ -520,6 +532,7 @@ def pegawai_terbaik(request):
             }
 
         # Proses perhitungan normalisasi dan preferensi
+        PegawaiTerbaik.objects.filter(tahun_penilaian=tahun_penilaian).delete()
         for p in penilaian:
             nilai_dict = json.loads(p.nilai)
             normalisasi = {}
@@ -558,7 +571,6 @@ def pegawai_terbaik(request):
         })
 
     return render(request, 'pegawai_terbaik.html')
-
 
 # mengarahkan ke halaman riwayat
 def riwayat(request):
