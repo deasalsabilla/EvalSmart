@@ -74,3 +74,18 @@ class PegawaiTerbaik(models.Model):
     class Meta:
         verbose_name_plural = "Pegawai Terbaik"
         ordering = ['-tahun_penilaian', '-nilai_preferensi']
+        
+class RiwayatPenilaian(models.Model):
+    id = models.AutoField(primary_key=True)  # ID otomatis
+    nama = models.ForeignKey('Pegawai', on_delete=models.CASCADE)  # Relasi ke tabel Pegawai
+    bidang = models.ForeignKey('Bidang', on_delete=models.CASCADE)  # Relasi ke tabel Bidang
+    nilai = models.TextField()  # Nilai dalam format teks
+    tahun_penilaian = models.IntegerField()
+    
+    def __str__(self):
+        return f"Riwayat Penilaian {self.nama.nama} - {self.bidang.nama} ({self.tahun_penilaian})"
+    
+    class Meta:
+        verbose_name_plural = "Riwayat Penilaian"
+        ordering = ['id']
+
